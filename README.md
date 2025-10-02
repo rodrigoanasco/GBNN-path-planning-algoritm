@@ -3,7 +3,7 @@
 Neural-inspired coverage path planning for a ship hull using a **Graph‑Based Neural Network (GBNN)**.  
 Given a 3D hull mesh (STL/OBJ), the pipeline samples surface points, builds a neighbor graph (via KD‑Tree with distance filtering), detects obstacles by plane fitting, and simulates coverage with an animated walker guided by neural activities.
 
-https://github.com/ (add repo link when published)
+[🎥 Video demo (Google Drive)](https://drive.google.com/file/d/1wdH3bmUyg92542pfG9k4C3vnNmVtWJAX/view)
 
 ---
 
