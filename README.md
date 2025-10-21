@@ -130,12 +130,6 @@ Run the notebooks to experiment with individual components:
 
 ---
 
-## 📄 License
-
-MIT (add LICENSE file if publishing).
-
----
-
 ## 🙌 Acknowledgements
 
 - Built with: **NumPy**, **SciPy**, **trimesh**, **matplotlib**, **geomdl (NURBS)**, and **KDTree**.  
