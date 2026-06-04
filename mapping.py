@@ -1,13 +1,11 @@
-import trimesh
-import numpy as np
-from geomdl import BSpline
-from geomdl import fitting
-from scipy.spatial import KDTree
+from pathlib import Path
+
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from point import Point
-from scipy.spatial import KDTree
 import numpy as np
+import trimesh
+from scipy.spatial import KDTree
+
+from point import Point
 
 def load_hull_model(file_path):
     """Loads an STL or OBJ mesh using trimesh."""
@@ -33,10 +31,12 @@ def convert_to_point_objects(discretized_points, k=20):
     coords = np.array([[p.x, p.y, p.z] for p in points])
     tree = KDTree(coords)
 
-    # Assign up to k neighbors for each point
+    # Assign up to k neighbors for each point, excluding the point itself.
     for i, p in enumerate(points):
-        _, idxs = tree.query(coords[i], k=min(k, len(points)))
-        p.neighbors = idxs.tolist()
+        query_count = min(k + 1, len(points))
+        _, idxs = tree.query(coords[i], k=query_count)
+        idxs = np.atleast_1d(idxs)
+        p.neighbors = [int(idx) for idx in idxs if int(idx) != i][:k]
     return points
 
 def visualize_discretized(points):
@@ -50,23 +50,23 @@ def visualize_discretized(points):
     ax.set_title('Sampled Hull Surface Points')
     plt.show()
 
-def main():
+def main(file_path=None, num_points=500, k=20, visualize=True):
     """
     1. Loads the STL hull
     2. Samples num_points from the mesh
     3. Converts them to Point objects
     4. Returns the final list of Point objects
     """
-    file_path = 'hull_only.stl'  # <-- Put your STL here
+    if file_path is None:
+        file_path = Path(__file__).with_name("hull_only.stl")
     hull_mesh = load_hull_model(file_path)
 
-    # Increase num_points to get more coverage
-    discretized_points = sample_hull_points(hull_mesh, num_points=500)
+    discretized_points = sample_hull_points(hull_mesh, num_points=num_points)
     # Convert array -> GBNN-compatible Point objects
-    point_objects = convert_to_point_objects(discretized_points, k=20)
+    point_objects = convert_to_point_objects(discretized_points, k=k)
 
-    # Optional debug visualization
-    visualize_discretized(point_objects)
+    if visualize:
+        visualize_discretized(point_objects)
 
     return point_objects
 
