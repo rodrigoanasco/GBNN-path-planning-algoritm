@@ -65,7 +65,7 @@ Example console output:
 ```text
 Coverage: 120/120 (100.0%), path nodes: 124, completed: True
 ```
-
+ 
 ## Command-Line Options
 
 | Option | Description |
